@@ -8,7 +8,9 @@ agent = Agent(
         You must try, where possible, to infer the url that the user wants to scrape.
         If you cannot infer the URL, you should ask the user for the URL, or explain that you cannot scrape the web without a URL.
     """,
-    tools={scrape_url.__name__: scrape_url},
+    tools={
+        scrape_url.__name__: scrape_url,
+    },
 )
 
 agent.create_thread()
@@ -28,7 +30,10 @@ def chat():
 def single_run():
     # user_input = input("User: ")
     # user_input = "Can you scrape the URL: https://www.wikipedia.org?"
-    user_input = "what are the first 5 posts listed on the hacker news site for today (https://news.ycombinator.com/)?"
+    user_input = (
+        "['Apple', 'Banana', 'Cherry', 'Date', 'Fig']` write these to a csv file"
+    )
+    # user_input = "what are the first 5 posts listed on the hacker news site for today (https://news.ycombinator.com/)?"
     agent.add_message(user_input)
     answer = agent.run_agent()
     print(f"Assistant: {answer}")

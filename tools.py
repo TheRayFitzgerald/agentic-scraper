@@ -7,7 +7,7 @@ load_dotenv()
 FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API_KEY")
 
 
-def scrape_url(url: str) -> dict:
+def scrape_url(url: str) -> str:
     """
     Call this tool when the user wants to scrape a URL.
 
@@ -29,3 +29,19 @@ def scrape_url(url: str) -> dict:
         return e
     markdown_data = scraped_data.get("markdown")
     return markdown_data
+
+
+def download_generated_file(file_id: str) -> str:
+    """
+    Only call this tool when the user explicitly asks to download a generated file, after being prompted by the agent.
+    For now, this tool just prints the file_id.
+
+    Args:
+        file_id (str): The file_id of the generated file.
+
+    Returns:
+        str: The downloaded file.
+    """
+    print("== download_generated_file ==> tool called")
+    print(f"Downloading the file with file_id: {file_id}")
+    return file_id

@@ -5,6 +5,7 @@ from openai.types.beta.threads.run import Run
 import os
 from dotenv import load_dotenv
 import docstring_parser
+from utils import download_openai_file
 
 load_dotenv()
 
@@ -18,7 +19,10 @@ class Agent:
         self.instructions = instructions
         self.tool_belt = tools
         self.client = openai.OpenAI(api_key=OPENAI_API_KEY)
-        self.assistant = self.client.beta.assistants.create(model=MODEL)
+        self.assistant = self.client.beta.assistants.create(
+            model=MODEL,
+            tools=[{"type": "code_interpreter"}] + self._get_tools_in_open_ai_format(),
+        )
 
     def create_thread(self):
         self.thread = self.client.beta.threads.create()
@@ -29,11 +33,28 @@ class Agent:
         )
 
     def get_last_message(self):
+        try:
+            file_id = self.get_last_file_id()
+        except Exception as e:
+            print(e)
+        finally:
+            content = self.client.files.content(file_id)
+            download_openai_file(content)
+
         return (
             self.client.beta.threads.messages.list(thread_id=self.thread.id)
             .data[0]
             .content[0]
             .text.value
+        )
+
+    def get_last_file_id(self):
+        return (
+            self.client.beta.threads.messages.list(thread_id=self.thread.id)
+            .data[0]
+            .content[0]
+            .text.annotations[0]
+            .file_path.file_id
         )
 
     def _get_tools_in_open_ai_format(self):
@@ -78,11 +99,9 @@ class Agent:
 
     def _create_run(self):
         print("Creating run...")
-        print(self._get_tools_in_open_ai_format())
         return self.client.beta.threads.runs.create(
             thread_id=self.thread.id,
             assistant_id=self.assistant.id,
-            tools=self._get_tools_in_open_ai_format(),
             instructions=self.instructions,
         )
 
