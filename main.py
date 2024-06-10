@@ -7,6 +7,9 @@ agent = Agent(
         You have access to a tool `scrape_url` which can be used to scrape specific URLs.
         You must try, where possible, to infer the url that the user wants to scrape.
         If you cannot infer the URL, you should ask the user for the URL, or explain that you cannot scrape the web without a URL.
+        
+        If you ever create a file, you should do it as normal. 
+        However, in your response, you should always say the file was downloaded to the `output` directory, with the same filename as the original file.
     """,
     tools={
         scrape_url.__name__: scrape_url,
@@ -41,5 +44,5 @@ def single_run():
 
 if __name__ == "__main__":
     pass
-    # chat()
-    single_run()
+    chat()
+    # single_run()

@@ -35,11 +35,12 @@ class Agent:
     def get_last_message(self):
         try:
             file_id = self.get_last_file_id()
-        except Exception as e:
-            print(e)
-        finally:
             content = self.client.files.content(file_id)
-            download_openai_file(content)
+            file_name = self.get_last_file_name()
+            download_openai_file(content, file_name)
+        except Exception as e:
+            print("Error downloading file:")
+            print(e)
 
         return (
             self.client.beta.threads.messages.list(thread_id=self.thread.id)
@@ -56,6 +57,16 @@ class Agent:
             .text.annotations[0]
             .file_path.file_id
         )
+
+    def get_last_file_name(self):
+        file_path = (
+            self.client.beta.threads.messages.list(thread_id=self.thread.id)
+            .data[0]
+            .content[0]
+            .text.annotations[0]
+            .text
+        )
+        return file_path.split("/")[-1].replace("'", "")
 
     def _get_tools_in_open_ai_format(self):
         python_type_to_json_type = {

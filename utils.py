@@ -1,7 +1,16 @@
+import os
 
+OUTPUT_DIR = "output"
 
-def download_openai_file(content):
+def download_openai_file(content, file_name):
+    # Ensure the output directory exists
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    
+    # Read the file content
     file_data_bytes = content.read()
-    # write the content to a file
-    with open("file.csv", "w") as f:
-        f.write(file_data_bytes.decode("utf-8"))
+    
+    # Write the file to the output directory
+    with open(f"{OUTPUT_DIR}/{file_name}", "wb") as f:
+        f.write(file_data_bytes)
+        print(f"Downloaded file: {file_name}")
+
