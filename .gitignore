@@ -8,3 +8,5 @@ venv/
 venv
 
 output/
+
+**.DS_Store**

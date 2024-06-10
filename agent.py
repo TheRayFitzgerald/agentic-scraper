@@ -39,8 +39,7 @@ class Agent:
             file_name = self.get_last_file_name()
             download_openai_file(content, file_name)
         except Exception as e:
-            print("Error downloading file:")
-            print(e)
+            pass
 
         return (
             self.client.beta.threads.messages.list(thread_id=self.thread.id)
@@ -151,7 +150,6 @@ class Agent:
         status = run.status
         start_time = time.time()
         while status != "completed":
-            print(f"Run status: {status}")
             if status == "failed":
                 raise Exception(f"Run failed with error: {run.last_error}")
             if status == "expired":

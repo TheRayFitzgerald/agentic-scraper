@@ -1,9 +1,14 @@
 from agent import Agent
 from tools import scrape_url
+from colorama import Fore, Style, init
+
+init(autoreset=True)
+
 
 agent = Agent(
     instructions="""
         You are an expert Agentic Web Scraper. You can scrape the web for requested information.
+        
         You have access to a tool `scrape_url` which can be used to scrape specific URLs.
         You must try, where possible, to infer the url that the user wants to scrape.
         If you cannot infer the URL, you should ask the user for the URL, or explain that you cannot scrape the web without a URL.
@@ -25,9 +30,11 @@ def chat():
         if user_input.lower() == "exit":
             print("Exiting the agent...")
             break
+        if not user_input.strip():
+            continue
         agent.add_message(user_input)
         answer = agent.run_agent()
-        print(f"Assistant: {answer}")
+        print(f"Assistant: {Fore.GREEN}{answer}{Style.RESET_ALL}")
 
 
 def single_run():
@@ -39,7 +46,7 @@ def single_run():
     # user_input = "what are the first 5 posts listed on the hacker news site for today (https://news.ycombinator.com/)?"
     agent.add_message(user_input)
     answer = agent.run_agent()
-    print(f"Assistant: {answer}")
+    print(f"Assistant: {Fore.GREEN}{answer}{Style.RESET_ALL}")
 
 
 if __name__ == "__main__":

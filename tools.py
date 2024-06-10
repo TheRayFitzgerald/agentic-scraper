@@ -24,9 +24,8 @@ def scrape_url(url: str) -> str:
     try:
         scraped_data = app.scrape_url(url)
     except Exception as e:
-        print(f"Unable to scrape the URL: {url}")
-        print(e)
-        return e
+        print(f"Unable to scrape the URL: {url}. Error: {e}")
+        return "Unable to scrape the URL."
     markdown_data = scraped_data.get("markdown")
     return markdown_data
 
